@@ -1,0 +1,17 @@
+{
+  "name": "react-material-ui-keyboard-badge",
+  "version": "1.0.0",
+  "description": "Enable keyboard control and optional badge labeling",
+  "main": "index.js",
+  "repository": "https://github.com/rhdeck/react-material-ui-keyboard-badge",
+  "author": "Ray Deck",
+  "license": "MIT",
+  "dependencies": {
+    "detect-browser": "^4.8.0",
+    "hotkeys-js": "^3.7.3",
+    "uuid": "^3.3.3"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.7.1"
+  }
+}
