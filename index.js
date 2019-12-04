@@ -12,6 +12,29 @@ const reduceScopes = (oldValue, { scope, value, action }) => {
     case "remove":
       delete oldValue[scope];
       return { ...oldValue };
+    case "disableOthers":
+      return Object.entries(scopes).reduce(
+        (o, [thisScope, oldStatus]) => {
+          if (thisScope !== scope)
+            return { ...o, [thisScope]: "disabled_" + oldStatus };
+          return o;
+        },
+        { base: "disabled_enabled" }
+      );
+    case "enableOthers":
+      return Object.entries(scopes).reduce(
+        (o, [thisScope, oldStatus]) => {
+          if (thisScope !== scope) {
+            if (oldStatus.startsWith("disabled_"))
+              return {
+                ...o,
+                [thisScope]: oldStatus.substring("disabled_".length)
+              };
+          }
+          return o;
+        },
+        { base: "enabled" }
+      );
     default:
       return { ...oldValue, [scope]: value };
   }
@@ -24,10 +47,13 @@ const useKeyboardScopes = () => {
   const [scopes, updateScopes] = useContext(context);
   const enable = scope => updateScopes({ scope, value: "enabled" });
   const disable = scope => updateScopes({ scope, value: "disabled" });
-  return { scopes, enable, disable };
+  const enableOthers = scope => updateScopes({ action: "enableOthers", scope });
+  const disableOthers = scope =>
+    updateScopes({ action: "disableOthers", scope });
+  return { scopes, enable, disable, disableOthers, enableOthers };
 };
 const KeyboardBadge = ({
-  scope,
+  scope = "base",
   enabled = true,
   action,
   keyMap,
@@ -50,7 +76,8 @@ const KeyboardBadge = ({
   //switch up the keymap
   if (windowsKeyMap && isWindows) keyMap = windowsKeyMap;
   if (macKeyMap && !isWindows) keyMap = macKeyMap;
-  if (enabled && scope && scopes[scope] === "disabled") enabled = false;
+  if (enabled && scope && scopes[scope] && scopes[scope].startsWith("disabled"))
+    enabled = false;
   useEffect(() => {
     if (!id) return;
     hotkeys.deleteScope(id);
@@ -69,7 +96,9 @@ const KeyboardBadge = ({
       invisible={!enabled}
       {...props}
     >
-      {children({ action, enabled })}
+      {typeof children === "function"
+        ? children({ action, enabled })
+        : children}
     </Badge>
   );
 };
@@ -79,4 +108,9 @@ const withKeyboardBadge = C => ({ enabled, action, keyMap, ...props }) => (
   </KeyboardBadge>
 );
 export default KeyboardBadge;
-export { withKeyboardBadge, KeyboardScopeProvider, useKeyboardScopes };
+export {
+  withKeyboardBadge,
+  KeyboardScopeProvider,
+  useKeyboardScopes,
+  KeyboardBadge
+};
