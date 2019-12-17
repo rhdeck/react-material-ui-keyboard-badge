@@ -2,7 +2,9 @@
   "name": "react-material-ui-keyboard-badge",
   "version": "1.0.0",
   "description": "Enable keyboard control and optional badge labeling",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "browser": "lib/index.umd.js",
+  "module": "lib/index.es.js",
   "repository": "https://github.com/rhdeck/react-material-ui-keyboard-badge",
   "author": "Ray Deck",
   "license": "MIT",
@@ -12,6 +14,23 @@
     "uuid": "^3.3.3"
   },
   "peerDependencies": {
-    "@material-ui/core": "^4.7.1"
+    "@material-ui/core": "^4.7.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "node-watch": "^0.6.3",
+    "rollup": "^1.27.8",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0"
+  },
+  "scripts": {
+    "build": "rollup -c && yarn pack -f package.tgz",
+    "watch": "node watch.js"
   }
 }
