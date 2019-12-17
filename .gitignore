@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+lib/index.umd.js.map
+lib/index.umd.js
+lib/index.js.map
+lib/index.js
+lib/index.es.js.map
+lib/index.es.js
