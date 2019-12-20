@@ -3,23 +3,22 @@ import React, {
   createContext,
   useContext,
   useReducer,
-  useCallback
+  useCallback,
+  useState
 } from "react";
 import hotkeys from "hotkeys-js";
 import { Badge } from "@material-ui/core";
 import { detect } from "detect-browser";
-hotkeys.filter = event => {
-  return true;
-};
+hotkeys.filter = event => true;
 const browser = detect();
-const isWindows = browser && browser.os === "windows";
+const isWindows = browser && browser.os.toLowerCase().startsWith("windows");
 const context = createContext([{}, () => {}]);
 const { Provider } = context;
 const reduceScopes = (scopes, { scope, value, action }) => {
   switch (action) {
     case "remove":
-      delete oldValue[scope];
-      return { ...oldValue };
+      delete scopes[scope];
+      return { ...scopes };
     case "disableOthers":
       return Object.entries(scopes).reduce(
         (o, [thisScope, oldStatus]) => {
@@ -99,14 +98,31 @@ const KeyboardBadge = ({
   ) {
     enabled = false;
   }
+  const [thisAction, setThisAction] = useState();
+  useEffect(
+    () =>
+      setThisAction(() => (event, handler) => {
+        action(event, handler);
+        event.preventDefault();
+        return false;
+      }),
+    [action]
+  );
   useEffect(() => {
     if (keyMap === null) return;
-    if (enabled) hotkeys(keyMap, { keyUp: true }, action);
-    else hotkeys.unbind(keyMap);
+    if (!thisAction) return;
+    if (enabled) {
+      console.log("Binding keymap", keyMap);
+      hotkeys(keyMap, thisAction);
+    } else hotkeys.unbind(keyMap, thisAction);
+
     return () => {
-      if (keyMap) hotkeys.unbind(keyMap);
+      if (keyMap) {
+        console.log("Unbinding keymap on unmount", keyMap);
+        hotkeys.unbind(keyMap);
+      }
     };
-  }, [action, keyMap, enabled]);
+  }, [thisAction, keyMap, enabled]);
   const badgeContent =
     keyMap &&
     keyMap
