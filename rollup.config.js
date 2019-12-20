@@ -13,7 +13,8 @@ export default [
     output: {
       file: packageJSON.main,
       format: "cjs",
-      sourcemap: true
+      sourcemap: true,
+      exports: "named"
     },
     plugins: [
       babel({
@@ -33,7 +34,8 @@ export default [
       globals: {
         react: "React"
       },
-      sourcemap: true
+      sourcemap: true,
+      exports: "named"
     },
     plugins: [
       babel({
