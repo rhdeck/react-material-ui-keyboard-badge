@@ -119,7 +119,7 @@ const KeyboardBadge = ({
     return () => {
       if (keyMap) {
         console.log("Unbinding keymap on unmount", keyMap);
-        hotkeys.unbind(keyMap);
+        hotkeys.unbind(keyMap, thisAction);
       }
     };
   }, [thisAction, keyMap, enabled]);
