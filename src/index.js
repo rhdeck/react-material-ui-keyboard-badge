@@ -111,16 +111,11 @@ const KeyboardBadge = ({
   useEffect(() => {
     if (keyMap === null) return;
     if (!thisAction) return;
-    if (enabled) {
-      console.log("Binding keymap", keyMap);
-      hotkeys(keyMap, thisAction);
-    } else hotkeys.unbind(keyMap, thisAction);
+    if (enabled) hotkeys(keyMap, thisAction);
+    else hotkeys.unbind(keyMap, thisAction);
 
     return () => {
-      if (keyMap) {
-        console.log("Unbinding keymap on unmount", keyMap);
-        hotkeys.unbind(keyMap, thisAction);
-      }
+      if (keyMap) hotkeys.unbind(keyMap, thisAction);
     };
   }, [thisAction, keyMap, enabled]);
   const badgeContent =
