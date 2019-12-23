@@ -83,7 +83,6 @@ const KeyboardBadge = ({
     vertical: "top",
     horizontal: "left"
   },
-  style = { width: "100%" },
   ...props
 }) => {
   const { scopes } = useKeyboardScopes();
@@ -128,7 +127,7 @@ const KeyboardBadge = ({
       .replace("return", "↩︎");
   return (
     <Badge
-      {...{ color, anchorOrigin, style, badgeContent }}
+      {...{ color, anchorOrigin, badgeContent }}
       invisible={!enabled}
       {...props}
     >
