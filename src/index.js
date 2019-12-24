@@ -32,10 +32,12 @@ const reduceScopes = (scopes, { scope, value, action }) => {
       return Object.entries(scopes).reduce(
         (o, [thisScope, oldStatus]) => {
           if (thisScope !== scope) {
-            //if (oldStatus.startsWith("disabled_"))
+            const changeTo = oldStatus.startsWith("disabled_")
+              ? oldStatus.substring("disabled_".length)
+              : "enabled";
             return {
               ...o,
-              [thisScope]: "enabled" //oldStatus.substring("disabled_".length)
+              [thisScope]: changeTo
             };
           }
           return o;
@@ -112,7 +114,6 @@ const KeyboardBadge = ({
     if (!thisAction) return;
     if (enabled) hotkeys(keyMap, thisAction);
     else hotkeys.unbind(keyMap, thisAction);
-
     return () => {
       if (keyMap) hotkeys.unbind(keyMap, thisAction);
     };
