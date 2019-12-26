@@ -133,7 +133,7 @@ const KeyboardBadge = ({
       {...props}
     >
       {typeof children === "function"
-        ? children({ action, enabled })
+        ? children({ action, enabled, badgeContent, keyMap })
         : children}
     </Badge>
   );
