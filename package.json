@@ -1,6 +1,6 @@
 {
   "name": "react-material-ui-keyboard-badge",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Enable keyboard control and optional badge labeling",
   "main": "lib/index.js",
   "browser": "lib/index.umd.js",
