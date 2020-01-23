@@ -7,7 +7,7 @@ import React, {
   useState
 } from "react";
 import hotkeys from "hotkeys-js";
-import { Badge } from "@material-ui/core";
+import { Badge, makeStyles } from "@material-ui/core";
 import { detect } from "detect-browser";
 hotkeys.filter = event => true;
 const browser = detect();
@@ -126,11 +126,16 @@ const KeyboardBadge = ({
       .replace("shift", "⇧")
       .replace("enter", "↩︎")
       .replace("return", "↩︎");
+  const classes = useStyles();
   return (
     <Badge
       {...{ color, anchorOrigin, badgeContent }}
       invisible={!enabled}
       {...props}
+      classes={{
+        // badge: classes.badge,
+        colorPrimary: classes.colorPrimary
+      }}
     >
       {typeof children === "function"
         ? children({ action, enabled, badgeContent, keyMap })
@@ -150,3 +155,13 @@ export {
   useKeyboardScopes,
   KeyboardBadge
 };
+const useStyles = makeStyles(theme => {
+  return {
+    colorPrimary: {
+      backgroundColor:
+        theme.palette.type === "dark"
+          ? theme.palette.primary.light
+          : theme.palette.primary.dark
+    }
+  };
+});
